@@ -6,7 +6,7 @@ describe 'Класс работы с PrivateMessage' do
 
   end
 
-  # it '' do
-  #
-  # end
+  it 'показать личные сообщения' do
+
+  end
 end
