@@ -10,3 +10,4 @@ class User
     @name = STDIN.gets.chomp
   end
 end
+
