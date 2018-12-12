@@ -57,10 +57,12 @@ text = STDIN.gets.chomp if input1 == 1
 query += "(Name, Time, Text, Whom) VALUES ('#{user.name}', '#{Time.now.strftime('%d.%m.%Y')}', '#{text}', 'общее')" if input2 == 3 && input1 == 1
 query += "(Name, Time, Text, Whom) VALUES ('#{user.name}', '#{Time.now.strftime('%d.%m.%Y')}', '#{text}', 'Bob')" if input2 == 4 && input1 == 1
 
+puts "Сообщение записанно в ДБ" if input1 == 1
+
 db.action_with_db(query).each do |i|
   puts
   print i
-end
+end if input1 == 2
 
 # (Name) VALUES ('#{name}')
 
