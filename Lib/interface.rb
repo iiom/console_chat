@@ -12,21 +12,6 @@ class Interface
     @user = User.new
   end
 
-  def login
-    name = @user.enter_name
-    @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
-  end
-
-  def registr
-    name = @user.enter_name
-    @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')")
-  end
-
-  def logout
-    puts "выход"
-    exit
-  end
-
   def action(input, name = nil, text = nil, whom = nil)
     if input == 1
       query = Message.write_message(text, name)
@@ -39,17 +24,13 @@ class Interface
     end
   end
 
-  def choice
-    puts "Выберите действие:"
-    puts "написать общее сообщение - 1\nпрочитать общее сообщение - 2"
-    puts "написать личное сообщение - 3\nпрочитать личное сообщенияе - 4"
-    puts "выход - 0"
-    input = STDIN.gets.to_i
-  end
-
   def text_input
     puts "Введите текст сообщения"
     text = STDIN.gets.chomp
+  end
+
+  def input
+    STDIN.gets.chomp
   end
 
   def to_s(db)
@@ -58,4 +39,18 @@ class Interface
       print i
     end
   end
+
+  def enter_name
+    @user.name = STDIN.gets.chomp
+  end
+
+  def login?(name)
+    result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
+    result.join("\s") == name
+  end
+
+  def registr(name)
+    @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')")
+  end
+
 end

@@ -5,30 +5,41 @@ require_relative 'lib/user'
 require_relative 'lib/interface'
 
 current_path = File.dirname(__FILE__)
-
 interface = Interface.new(current_path)
 
-puts "выберите рега или логин?\nregistr - 1\nlogin - 2"
-choice = STDIN.gets.to_i
+loop do
+  choice = nil
+  until choice == 1 || choice == 2
+    puts "выберите рега или логин?\nregistr - 1\nlogin - 2"
+    choice = interface.input.to_i
+    if choice == 1
+      puts "имя"
+      interface.registr(interface.enter_name)
+      puts 'Регистрация завершена'
+    elsif choice == 2
+      name = nil
+      while interface.login?(name) == false
+        puts "Введите имя"
+        name = interface.enter_name
+        puts 'Такого имени нет в базе'
+      end
+      puts "Авторизация успешна\n\n\n"
+    else
+      puts "wrong input"
+    end
+  end
 
-
-if choice == 1
-  puts "имя"
-  interface.registr
-  puts 'Регистрация успешна'
-else
-  puts "имя"
-  puts interface.login.join("\s") == interface.user.name ? "Авторизация успешна\n\n\n" : 'Такого имени нет в базе'
-end
-
-choice = nil
-while choice != 0
-  choice = interface.choice
-  interface.logout if choice == 0
-  text = interface.text_input if choice == 1 || choice == 3
-  query = interface.action(choice, interface.user.name, text, 'Bob')
-
-  interface.to_s(interface.db.action_with_db(query))
+  choice = nil
+  while choice != 9
+    puts "Выберите действие:"
+    puts "написать общее сообщение - 1\nпрочитать общее сообщение - 2"
+    puts "написать личное сообщение - 3\nпрочитать личное сообщенияе - 4"
+    puts "выход - 9"
+    choice = interface.input.to_i
+    text = interface.text_input if choice == 1 || choice == 3
+    query = interface.action(choice, interface.user.name, text, 'Bob')
+    interface.to_s(interface.db.action_with_db(query)) unless ![1, 2, 3, 4].include?(choice)
+  end
 end
 
 
