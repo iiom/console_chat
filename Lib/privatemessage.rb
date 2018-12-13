@@ -1,4 +1,5 @@
 require_relative 'message'
+require 'date'
 
 class PrivatMessage < Message
 
@@ -21,3 +22,7 @@ class PrivatMessage < Message
     query
   end
 end
+
+# p PrivatMessage.new
+# p PrivatMessage.write_message('asd', 'Jack', 'Bob')
+# p PrivatMessage.read_message('Jack')

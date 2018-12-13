@@ -21,3 +21,8 @@ class Message
     query
   end
 end
+
+# p m = Message.new
+# p Message.write_message('asd', 'Jack')
+# p Message.write_message('asd', 'Jack').instance_of?(Message)
+# p Message.read_message

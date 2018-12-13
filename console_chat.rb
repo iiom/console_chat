@@ -17,12 +17,12 @@ if choice == 1
   puts 'Регистрация успешна'
 else
   puts "имя"
-  puts interface.login.join("\s") == interface.user.name ? 'Авторизация успешна' : 'Такого имени нет в базе'
+  puts interface.login.join("\s") == interface.user.name ? "Авторизация успешна\n\n\n" : 'Такого имени нет в базе'
 end
 
 choice = interface.choice
 interface.logout if choice == 0
 text = interface.text_input if choice == 1 || choice == 3
-query = interface.action(choice, name, text, 'Bob')
+query = interface.action(choice, interface.user.name, text, 'Bob')
 
-interface.to_s(db.action_with_db(query)) if choice == 2 || choice == 4
+interface.to_s(interface.db.action_with_db(query))
