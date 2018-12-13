@@ -1,16 +1,13 @@
 require 'date'
 
 class Message
-
-  def initialize
-    @time_now = Time.now.strftime('%d.%m.%Y')
-  end
+TIME_NOW = Time.now.strftime('%d.%m.%Y')
 
   def self.write_message(text, name)
     new
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-        " '#{@time_now}', '#{text}', 'общее')"
+        " '#{TIME_NOW}', '#{text}', 'общее')"
     query
   end
 
@@ -21,8 +18,3 @@ class Message
     query
   end
 end
-
-# p m = Message.new
-# p Message.write_message('asd', 'Jack')
-# p Message.write_message('asd', 'Jack').instance_of?(Message)
-# p Message.read_message

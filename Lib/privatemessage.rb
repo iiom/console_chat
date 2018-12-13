@@ -3,15 +3,11 @@ require 'date'
 
 class PrivatMessage < Message
 
-  def initialize
-    super
-  end
-
   def self.write_message(text, name, whom)
     new
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-        " '#{@time_now}', '#{text}', '#{whom}')"
+        " '#{TIME_NOW}', '#{text}', '#{whom}')"
     query
   end
 
@@ -22,7 +18,3 @@ class PrivatMessage < Message
     query
   end
 end
-
-# p PrivatMessage.new
-# p PrivatMessage.write_message('asd', 'Jack', 'Bob')
-# p PrivatMessage.read_message('Jack')
