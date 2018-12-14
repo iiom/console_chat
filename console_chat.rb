@@ -47,7 +47,8 @@ loop do
       end
     end
     query = interface.make_query_request(choice, user.name, text, whom)
-    Message.to_s(interface.db.action_with_db(query)) unless ![1, 2, 3, 4].include?(choice)
+    Message.to_s(interface.db.action_with_db(query)) unless ![1, 2].include?(choice)
+    PrivatMessage.to_s(interface.db.action_with_db(query)) unless ![3, 4].include?(choice)
   end
 end
 
