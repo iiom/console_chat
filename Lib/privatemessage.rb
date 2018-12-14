@@ -1,13 +1,12 @@
 require_relative 'message'
-require 'date'
 
 class PrivatMessage < Message
 
   def self.write_message(text, name, whom)
-    new
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
         " '#{TIME_NOW}', '#{text}', '#{whom}')"
+    new
     query
   end
 

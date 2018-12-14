@@ -4,10 +4,10 @@ class Message
 TIME_NOW = Time.now.strftime('%d.%m.%Y')
 
   def self.write_message(text, name)
-    new
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
         " '#{TIME_NOW}', '#{text}', 'общее')"
+    new
     query
   end
 

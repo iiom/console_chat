@@ -12,7 +12,7 @@ class Interface
     @user = User.new
   end
 
-  def action(input, name = nil, text = nil, whom = nil)
+  def make_query_request(input, name = nil, text = nil, whom = nil)
     if input == 1
       query = Message.write_message(text, name)
     elsif input == 2
@@ -24,9 +24,8 @@ class Interface
     end
   end
 
-  def text_input
-    puts "Введите текст сообщения"
-    text = STDIN.gets.chomp
+  def enter_name
+    @user.name = input
   end
 
   def input
@@ -40,10 +39,6 @@ class Interface
     end
   end
 
-  def enter_name
-    @user.name = STDIN.gets.chomp
-  end
-
   def login?(name)
     result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
     result.join("\s") == name
@@ -52,5 +47,4 @@ class Interface
   def registr(name)
     @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')")
   end
-
 end
