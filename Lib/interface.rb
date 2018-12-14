@@ -26,13 +26,6 @@ class Interface
     STDIN.gets.chomp
   end
 
-  def to_s(db)
-    db.each do |i|
-      puts
-      print i
-    end
-  end
-
   def login?(name)
     result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
     result.join("\s") == name

@@ -16,4 +16,8 @@ class PrivatMessage < Message
     new
     query
   end
+
+  def self.to_s(db)
+    super
+  end
 end
