@@ -1,15 +1,13 @@
 require_relative 'message'
 require_relative 'privatemessage'
 require_relative 'database'
-require_relative 'user'
 
 class Interface
-  attr_reader :db, :user
+  attr_reader :db
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
     @db = DataBase.new(@db_path)
-    @user = User.new
   end
 
   def make_query_request(input, name = nil, text = nil, whom = nil)
@@ -18,14 +16,10 @@ class Interface
     elsif input == 2
       query = Message.read_message
     elsif input == 3
-      query = PrivatMessage.write_message(text, name, 'Bob')
+      query = PrivatMessage.write_message(text, name, whom)
     elsif input == 4
       query = PrivatMessage.read_message(name)
     end
-  end
-
-  def enter_name
-    @user.name = input
   end
 
   def input
