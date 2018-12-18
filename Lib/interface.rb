@@ -3,7 +3,6 @@ require_relative 'message'
 require_relative 'database'
 
 class Interface
-  TIME_NOW = Time.now.strftime('%d.%m.%Y')
   attr_reader :messages
 
   def initialize(current_path)
@@ -25,14 +24,14 @@ class Interface
     if input == 1
       query = "INSERT INTO Messages "
       query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-          " '#{TIME_NOW}', '#{text}', 'общее')"
+          " '#{Time.now.strftime('%d.%m.%Y %H:%M:%S')}', '#{text}', 'общее')"
     elsif input == 2
       query = "SELECT * FROM Messages "
       query += "WHERE Whom = 'общее'"
     elsif input == 3
       query = "INSERT INTO Messages "
       query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-          " '#{TIME_NOW}', '#{text}', '#{whom}')"
+          " '#{Time.now.strftime('%d.%m.%Y %H:%M:%S')}', '#{text}', '#{whom}')"
     elsif input == 4
       query = "SELECT * FROM Messages "
       query += "WHERE Whom = '#{name}'"
