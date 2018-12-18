@@ -21,21 +21,21 @@ class Interface
   end
 
   def make_query_request2(input, name = nil, text = nil, whom = nil)
-      if input == 1
-        query = "INSERT INTO Messages "
-        query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-            " '#{TIME_NOW}', '#{text}', 'общее')"
-      elsif input == 2
-        query = "SELECT * FROM Messages "
-        query += "WHERE Whom = 'общее'"
-      elsif input == 3
-        query = "INSERT INTO Messages "
-        query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-            " '#{TIME_NOW}', '#{text}', '#{whom}')"
-      elsif input == 4
-        query = "SELECT * FROM Messages "
-        query += "WHERE Whom = '#{name}'"
-      end
+    if input == 1
+      query = "INSERT INTO Messages "
+      query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
+          " '#{TIME_NOW}', '#{text}', 'общее')"
+    elsif input == 2
+      query = "SELECT * FROM Messages "
+      query += "WHERE Whom = 'общее'"
+    elsif input == 3
+      query = "INSERT INTO Messages "
+      query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
+          " '#{TIME_NOW}', '#{text}', '#{whom}')"
+    elsif input == 4
+      query = "SELECT * FROM Messages "
+      query += "WHERE Whom = '#{name}'"
+    end
     query
   end
 
@@ -44,6 +44,7 @@ class Interface
   end
 
   def login?(name)
+    @db.db_to_array
     result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
     result.join("\s") == name
   end
