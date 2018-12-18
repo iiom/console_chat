@@ -8,13 +8,10 @@ class Message
     @whom = data["Whom"]
   end
 
-  def self.to_s(message)
-    message.each do |i|
+  def to_s
       puts '___________________________________________'
-      puts i.text
-      puts "(#{i.time}) #{i.name}"
+      puts @text
+      puts "(#{@time}) #{@name}"
       puts '___________________________________________'
-    end
   end
-
 end

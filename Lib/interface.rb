@@ -4,21 +4,21 @@ require_relative 'database'
 
 class Interface
   TIME_NOW = Time.now.strftime('%d.%m.%Y')
-  attr_reader :message
+  attr_reader :messages
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
     @db = DataBase.new(@db_path)
-    @message = []
+    @messages = []
   end
 
   def load_message(query)
-    @message = []
+    @messages = []
     @db.db_to_hash
     @db.action_with_db(query).each do |i|
-      @message << Message.new(i)
+      @messages << Message.new(i)
     end
-    @message
+    @messages
   end
 
   def make_query_request2(input, name = nil, text = nil, whom = nil)

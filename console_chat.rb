@@ -53,7 +53,7 @@ loop do
     query = interface.make_query_request2(choice, user.name, text, whom)
 
     interface.load_message(query) unless ![1, 2, 3, 4].include?(choice)
-    Message.to_s(interface.message) unless ![2, 4].include?(choice)
+    interface.messages.each { |i| i.to_s } unless ![2, 4].include?(choice)
   end
 end
 
