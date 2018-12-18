@@ -6,14 +6,12 @@ class PrivatMessage < Message
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
         " '#{TIME_NOW}', '#{text}', '#{whom}')"
-    new
     query
   end
 
   def self.read_message(name)
     query = "SELECT * FROM Messages "
     query += "WHERE Whom = '#{name}'"
-    new
     query
   end
 

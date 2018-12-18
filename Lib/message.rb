@@ -7,14 +7,12 @@ class Message
     query = "INSERT INTO Messages "
     query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
         " '#{TIME_NOW}', '#{text}', 'общее')"
-    new
     query
   end
 
   def self.read_message
     query = "SELECT * FROM Messages "
     query += "WHERE Whom = 'общее'"
-    new
     query
   end
 

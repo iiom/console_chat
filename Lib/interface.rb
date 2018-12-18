@@ -1,26 +1,62 @@
-require_relative 'message'
-require_relative 'privatemessage'
+require 'date'
+require_relative 'message2'
 require_relative 'database'
+# require_relative 'message'
+# require_relative 'privatemessage'
 
 class Interface
-  attr_reader :db
+  TIME_NOW = Time.now.strftime('%d.%m.%Y')
+  attr_reader :db, :message
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
     @db = DataBase.new(@db_path)
+    @message = []
   end
 
-  def make_query_request(input, name = nil, text = nil, whom = nil)
-    if input == 1
-      query = Message.write_message(text, name)
-    elsif input == 2
-      query = Message.read_message
-    elsif input == 3
-      query = PrivatMessage.write_message(text, name, whom)
-    elsif input == 4
-      query = PrivatMessage.read_message(name)
+  def load_message(query)
+    @message = []
+    @db.db_to_hash
+    @db.action_with_db(query).each do |i|
+      @message << Message2.new(i)
     end
+    @message
   end
+
+  def make_query_request2(input, name = nil, text = nil, whom = nil)
+      if input == 1
+        query = "INSERT INTO Messages "
+        query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
+            " '#{TIME_NOW}', '#{text}', 'общее')"
+      elsif input == 2
+        query = "SELECT * FROM Messages "
+        query += "WHERE Whom = 'общее'"
+      elsif input == 3
+        query = "INSERT INTO Messages "
+        query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
+            " '#{TIME_NOW}', '#{text}', '#{whom}')"
+      elsif input == 4
+        query = "SELECT * FROM Messages "
+        query += "WHERE Whom = '#{name}'"
+      end
+    query
+  end
+
+  def to_s
+    @message.each {|i| puts "(#{i.time}) #{i.name} \"#{i.text}\""}
+  end
+
+  # def make_query_request(input, name = nil, text = nil, whom = nil)
+  #   if input == 1
+  #     query = Message.write_message(text, name)
+  #   elsif input == 2
+  #     query = Message.read_message
+  #   elsif input == 3
+  #     query = PrivatMessage.write_message(text, name, whom)
+  #   elsif input == 4
+  #     query = PrivatMessage.read_message(name)
+  #   end
+  # end
 
   def input
     STDIN.gets.chomp
