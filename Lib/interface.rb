@@ -4,6 +4,7 @@ require_relative 'database'
 
 class Interface
   TIME_NOW = Time.now.strftime('%d.%m.%Y')
+  attr_reader :message
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
@@ -37,10 +38,6 @@ class Interface
       query += "WHERE Whom = '#{name}'"
     end
     query
-  end
-
-  def to_s
-    @message.each {|i| puts "(#{i.time}) #{i.name} \"#{i.text}\""}
   end
 
   def login?(name)

@@ -7,4 +7,14 @@ class Message
     @time = data["Time"]
     @whom = data["Whom"]
   end
+
+  def self.to_s(message)
+    message.each do |i|
+      puts '___________________________________________'
+      puts i.text
+      puts "(#{i.time}) #{i.name}"
+      puts '___________________________________________'
+    end
+  end
+
 end
