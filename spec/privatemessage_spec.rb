@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../Lib/privatemessage'
+require_relative '../Lib//privatemessage'
 
 describe 'Класс работы с PrivateMessage' do
   it 'создание личного сообщения' do

@@ -1,25 +1,10 @@
-require 'date'
-
 class Message
-  TIME_NOW = Time.now.strftime('%d.%m.%Y')
+  attr_reader :name, :text, :time
 
-  def self.write_message(text, name)
-    query = "INSERT INTO Messages "
-    query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
-        " '#{TIME_NOW}', '#{text}', 'общее')"
-    query
-  end
-
-  def self.read_message
-    query = "SELECT * FROM Messages "
-    query += "WHERE Whom = 'общее'"
-    query
-  end
-
-  def self.to_s(db)
-    db.each do |i|
-      puts
-      print i
-    end
+  def initialize(data)
+    @name = data["Name"]
+    @text = data["Text"]
+    @time = data["Time"]
+    @whom = data["Whom"]
   end
 end

@@ -1,6 +1,6 @@
 .idea
 .rvmrc
 console.db
-
+Data/DB/console.db
 test
 

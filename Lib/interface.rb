@@ -1,12 +1,9 @@
 require 'date'
-require_relative 'message2'
+require_relative 'message'
 require_relative 'database'
-# require_relative 'message'
-# require_relative 'privatemessage'
 
 class Interface
   TIME_NOW = Time.now.strftime('%d.%m.%Y')
-  attr_reader :db, :message
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
@@ -18,7 +15,7 @@ class Interface
     @message = []
     @db.db_to_hash
     @db.action_with_db(query).each do |i|
-      @message << Message2.new(i)
+      @message << Message.new(i)
     end
     @message
   end
@@ -44,22 +41,6 @@ class Interface
 
   def to_s
     @message.each {|i| puts "(#{i.time}) #{i.name} \"#{i.text}\""}
-  end
-
-  # def make_query_request(input, name = nil, text = nil, whom = nil)
-  #   if input == 1
-  #     query = Message.write_message(text, name)
-  #   elsif input == 2
-  #     query = Message.read_message
-  #   elsif input == 3
-  #     query = PrivatMessage.write_message(text, name, whom)
-  #   elsif input == 4
-  #     query = PrivatMessage.read_message(name)
-  #   end
-  # end
-
-  def input
-    STDIN.gets.chomp
   end
 
   def login?(name)

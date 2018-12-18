@@ -13,5 +13,4 @@ class DataBase
   def db_to_hash
     @db.results_as_hash = true
   end
-
 end

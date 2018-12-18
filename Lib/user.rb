@@ -1,13 +1,8 @@
 class User
-
   attr_reader :name
 
-  def initialize
-    @name = nil
-  end
-
-  def enter_name
-    @name = STDIN.gets.chomp
+  def initialize(name)
+    @name = name
   end
 end
 
