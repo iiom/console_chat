@@ -1,5 +1,4 @@
 class Message
-  attr_reader :name, :text, :time
 
   def initialize(data)
     @name = data["Name"]
