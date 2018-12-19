@@ -8,7 +8,6 @@ interface = Interface.new(current_path)
 db_path = current_path + '/Data/DB/console.db'
 db = DataBase.new(db_path)
 
-
 loop do
   choice = nil
   until choice == 1 || choice == 2
@@ -26,11 +25,13 @@ loop do
       puts "Регистрация завершена\n\n"
     elsif choice == 2
       name = nil
-      while interface.login?(name) == false
+      result = []
+      while (name != "" && result.join("\s") == name) == false
         puts 'Введите имя'
-       p name = STDIN.gets.chomp
+        name = STDIN.gets.chomp
         user = User.new(name)
-        puts 'Такого имени нет в базе' if interface.login?(name) == false
+        result = db.action_with_db(interface.query_to_login(name))
+        puts 'Такого имени нет в базе' if (name != "" && result.join("\s") == name) == false
       end
       puts "Авторизация успешна\n\n"
     else
