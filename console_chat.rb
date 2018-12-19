@@ -25,13 +25,13 @@ loop do
       puts "Регистрация завершена\n\n"
     elsif choice == 2
       name = nil
-      result = []
-      while (name != "" && result.join("\s") == name) == false
+      db_answer = []
+      while interface.user_exist?(name, db_answer) == false
         puts 'Введите имя'
         name = STDIN.gets.chomp
         user = User.new(name)
-        result = db.action_with_db(interface.query_to_login(name))
-        puts 'Такого имени нет в базе' if (name != "" && result.join("\s") == name) == false
+        db_answer = db.action_with_db(interface.query_to_login(name))
+        puts 'Такого имени нет в базе' if interface.user_exist?(name, db_answer) == false
       end
       puts "Авторизация успешна\n\n"
     else

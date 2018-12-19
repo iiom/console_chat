@@ -44,4 +44,8 @@ class Interface
   def query_to_registr(name)
     "INSERT INTO Users (Name) VALUES ('#{name}')"
   end
+
+  def user_exist?(name, db_answer)
+    name != "" && db_answer.join("\s") == name
+  end
 end
