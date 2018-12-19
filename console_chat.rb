@@ -5,6 +5,10 @@ require_relative 'lib/interface'
 current_path = File.dirname(__FILE__)
 interface = Interface.new(current_path)
 
+db_path = current_path + '/Data/DB/console.db'
+db = DataBase.new(db_path)
+
+
 loop do
   choice = nil
   until choice == 1 || choice == 2
@@ -18,7 +22,7 @@ loop do
         puts 'Имя должно быть не короче трёх символов' if name.size < 3
       end
       user = User.new(name)
-      interface.registr(name)
+      db.action_with_db(interface.query_to_registr(name))
       puts "Регистрация завершена\n\n"
     elsif choice == 2
       name = nil

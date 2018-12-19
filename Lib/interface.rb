@@ -43,8 +43,7 @@ class Interface
     name != "" && result.join("\s") == name
   end
 
-  def registr(name)
+  def query_to_registr(name)
     query = "INSERT INTO Users (Name) VALUES ('#{name}')"
-    @db.action_with_db(query)
   end
 end
