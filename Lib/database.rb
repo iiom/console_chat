@@ -1,7 +1,6 @@
 require 'sqlite3'
 
 class DataBase
-
   def initialize(db_path)
     @db = SQLite3::Database.open(db_path)
   end

@@ -1,5 +1,4 @@
 class Message
-
   def initialize(data)
     @name = data["Name"]
     @text = data["Text"]
