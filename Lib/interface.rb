@@ -3,7 +3,6 @@ require_relative 'message'
 require_relative 'database'
 
 class Interface
-  attr_reader :messages
 
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
