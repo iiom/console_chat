@@ -1,11 +1,12 @@
 require_relative 'lib/database'
 require_relative 'lib/user'
 require_relative 'lib/interface'
+require_relative 'lib/message_collector'
 
 current_path = File.dirname(__FILE__)
-interface = Interface.new(current_path)
-
 db_path = current_path + '/Data/DB/console.db'
+
+interface = Interface.new
 db = DataBase.new(db_path)
 
 loop do
@@ -55,9 +56,14 @@ loop do
         whom = STDIN.gets.chomp
       end
     end
-    query = interface.make_query_request(choice, user.name, text, whom)
-
-    messages = interface.load_message(query) if [1, 2, 3, 4].include?(choice)
-    messages.each {|i| i.to_s} if [2, 4].include?(choice)
+    if [1, 2, 3, 4].include?(choice)
+      query = interface.make_query_request(choice, user.name, text, whom)
+      db_as_hash = true
+      db_answer = db.action_with_db(query, db_as_hash)
+      messages = MessageCollector.load_message(db_answer)
+      messages.each {|i| i.to_s} if [2, 4].include?(choice)
+    else
+      puts 'Выбор не коректен'
+    end
   end
 end
