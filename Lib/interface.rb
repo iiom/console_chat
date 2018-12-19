@@ -11,8 +11,7 @@ class Interface
 
   def load_message(query)
     messages = []
-    @db.db_to_hash
-    @db.action_with_db(query).each do |str|
+    @db.action_with_db(query, true).each do |str|
       messages << Message.new(str)
     end
     messages
@@ -38,12 +37,11 @@ class Interface
   end
 
   def login?(name)
-    @db.db_to_array
-    result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'")
+    result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'", false)
     result.join("\s") == name
   end
 
   def registr(name)
-    @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')")
+    @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')", false)
   end
 end
