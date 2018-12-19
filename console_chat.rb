@@ -56,5 +56,3 @@ loop do
     interface.messages.each {|i| i.to_s} if [2, 4].include?(choice)
   end
 end
-
-
