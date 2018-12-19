@@ -4,7 +4,7 @@ require_relative 'lib/interface'
 require_relative 'lib/message'
 
 current_path = File.dirname(__FILE__)
-db_path = current_path + '/Data/DB/console.db'
+db_path = current_path + '/Data/db/console.db'
 
 interface = Interface.new
 db = DataBase.new(db_path)

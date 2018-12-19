@@ -1,6 +1,6 @@
 require 'rspec'
 require 'sqlite3'
-require_relative '../Lib/interface'
+require_relative '../lib/interface'
 
 describe 'Класс работы с Interface' do
   before(:all) do

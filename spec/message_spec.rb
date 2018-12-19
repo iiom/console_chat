@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../Lib/message'
+require_relative '../lib/message'
 
 describe 'Класс работы с Message' do
   before(:all) do

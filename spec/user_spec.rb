@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../Lib/user'
+require_relative '../lib/user'
 
 describe 'Класс работы с User' do
   before(:all) do

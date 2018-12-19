@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../Lib/database'
+require_relative '../lib/database'
 
 describe 'Класс работы с DataBase' do
   before(:all) do
