@@ -37,11 +37,13 @@ class Interface
   end
 
   def login?(name)
-    result = @db.action_with_db("SELECT Name FROM Users WHERE Name = '#{name}'", false)
-    result.join("\s") == name
+    query = "SELECT Name FROM Users WHERE Name = '#{name}'"
+    result = @db.action_with_db(query, false)
+    name != "" && result.join("\s") == name
   end
 
   def registr(name)
-    @db.action_with_db("INSERT INTO Users (Name) VALUES ('#{name}')", false)
+    query = "INSERT INTO Users (Name) VALUES ('#{name}')"
+    @db.action_with_db(query, false)
   end
 end

@@ -24,7 +24,7 @@ loop do
       name = nil
       while interface.login?(name) == false
         puts 'Введите имя'
-        name = STDIN.gets.chomp
+       p name = STDIN.gets.chomp
         user = User.new(name)
         puts 'Такого имени нет в базе' if interface.login?(name) == false
       end
