@@ -1,7 +1,7 @@
 require_relative 'lib/database'
 require_relative 'lib/user'
 require_relative 'lib/interface'
-require_relative 'lib/message_collector'
+require_relative 'lib/message'
 
 current_path = File.dirname(__FILE__)
 db_path = current_path + '/Data/DB/console.db'
@@ -59,8 +59,8 @@ loop do
     if [1, 2, 3, 4].include?(choice)
       query = interface.make_query_request(choice, user.name, text, whom)
       db_as_hash = true
-      db_answer = db.action_with_db(query, db_as_hash)
-      messages = MessageCollector.load_message(db_answer)
+      messages = []
+      messages = db.action_with_db(query, db_as_hash).map {|str| messages << Message.new(str)}
       messages.each {|i| i.to_s} if [2, 4].include?(choice)
     else
       puts 'Выбор не коректен'

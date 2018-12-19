@@ -1,6 +1,7 @@
 require 'date'
 
 class Interface
+
   def make_query_request(input, name = nil, text = nil, whom = nil)
     if input == 1
       query = "INSERT INTO Messages "
