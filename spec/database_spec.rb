@@ -2,20 +2,21 @@ require 'rspec'
 require_relative '../Lib/database'
 
 describe 'Класс работы с DataBase' do
-
-  it 'сохранение пользователя в БД' do
-
+  before(:all) do
+    current_path = File.dirname(__FILE__)
+    db_path = current_path + '/Fixtures/console.db'
+    @db = DataBase.new(db_path)
+    @query = "SELECT Name FROM Users WHERE Name = 'Jack'"
+    @boolean = true
   end
 
-  it 'проверки наличия пользователя в БД' do
-
+  it 'принадлежность созданного объекта к классу DataBase' do
+    expect(@db.instance_of?(DataBase)).to eq true
   end
 
-  it 'сохранение сообщения в БД' do
-
-  end
-
-  it 'чтение сообщения из ДБ' do
-
+  it 'преобразуте ДБ в Хэш' do
+    ii = nil
+    @db.action_with_db(@query, @boolean).each {|i| ii = i}
+    expect(ii.class).to eq Hash
   end
 end
