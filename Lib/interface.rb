@@ -11,13 +11,14 @@ class Interface
 
   def load_message(query)
     messages = []
-    @db.action_with_db(query, true).each do |str|
+    db_as_hash = true
+    @db.action_with_db(query, db_as_hash).each do |str|
       messages << Message.new(str)
     end
     messages
   end
 
-  def make_query_request2(input, name = nil, text = nil, whom = nil)
+  def make_query_request(input, name = nil, text = nil, whom = nil)
     if input == 1
       query = "INSERT INTO Messages "
       query += "(Name, Time, Text, Whom) VALUES ('#{name}'," +
@@ -38,12 +39,12 @@ class Interface
 
   def login?(name)
     query = "SELECT Name FROM Users WHERE Name = '#{name}'"
-    result = @db.action_with_db(query, false)
+    result = @db.action_with_db(query)
     name != "" && result.join("\s") == name
   end
 
   def registr(name)
     query = "INSERT INTO Users (Name) VALUES ('#{name}')"
-    @db.action_with_db(query, false)
+    @db.action_with_db(query)
   end
 end

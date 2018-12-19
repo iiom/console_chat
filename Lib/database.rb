@@ -6,8 +6,8 @@ class DataBase
     @db = SQLite3::Database.open(db_path)
   end
 
-  def action_with_db(param1, param2)
-    @db.results_as_hash = param2
-    @db.execute(param1)
+  def action_with_db(query, boolean = false)
+    @db.results_as_hash = boolean
+    @db.execute(query)
   end
 end
