@@ -8,16 +8,15 @@ class Interface
   def initialize(current_path)
     @db_path = current_path + '/Data/DB/console.db'
     @db = DataBase.new(@db_path)
-    @messages = []
   end
 
   def load_message(query)
-    @messages = []
+    messages = []
     @db.db_to_hash
-    @db.action_with_db(query).each do |i|
-      @messages << Message.new(i)
+    @db.action_with_db(query).each do |str|
+      messages << Message.new(str)
     end
-    @messages
+    messages
   end
 
   def make_query_request2(input, name = nil, text = nil, whom = nil)

@@ -52,7 +52,7 @@ loop do
     end
     query = interface.make_query_request2(choice, user.name, text, whom)
 
-    interface.load_message(query) if [1, 2, 3, 4].include?(choice)
-    interface.messages.each {|i| i.to_s} if [2, 4].include?(choice)
+    messages = interface.load_message(query) if [1, 2, 3, 4].include?(choice)
+    messages.each {|i| i.to_s} if [2, 4].include?(choice)
   end
 end
