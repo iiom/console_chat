@@ -1,5 +1,6 @@
 class Message
   attr_reader :name
+
   def initialize(data)
     @name = data["Name"]
     @text = data["Text"]
