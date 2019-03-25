@@ -33,3 +33,4 @@ class Interface
     name != "" && db_answer.join("\s") == name
   end
 end
+
