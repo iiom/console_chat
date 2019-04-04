@@ -21,7 +21,7 @@ def sign_login
       user.save
       if user.errors.present?
         choice = nil
-        p user.errors.each {|i| p i}
+        user.errors.each {|i| p i}
       else
         puts "Регистрация #{user.name} завершена\n\n"
       end
@@ -40,7 +40,6 @@ def sign_login
 end
 
 def read_right_message
-  # user = User.find_by(email: 'qwe@qwe.ru')
   choice = nil
   puts '1 - написать сообщение'
   puts '2 - прочитать сообщения адресованные пользователю'
@@ -70,4 +69,4 @@ def read_right_message
 end
 
 sign_login
-mes
+read_right_message
