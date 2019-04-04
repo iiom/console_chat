@@ -1,69 +1,73 @@
-require_relative 'lib/database'
-require_relative 'lib/user'
-require_relative 'lib/interface'
-require_relative 'lib/message'
+require 'active_record'
+require_relative 'lib/models/user'
+require_relative 'lib/models/message'
+require_relative 'lib/DBConnection'
 
-current_path = File.dirname(__FILE__)
-db_path = current_path + '/Data/db/console.db'
 
-interface = Interface.new
-db = DataBase.new(db_path)
+db_configuration_file = File.join(File.expand_path('..', __FILE__), 'db', 'config.yml')
+DBConnection.db_configuration(db_configuration_file)
 
-loop do
+def sign_login
   choice = nil
   until choice == 1 || choice == 2
     puts "Выберите регистрация или авторизация\nregistr - 1\nlogin - 2"
     choice = STDIN.gets.chomp.to_i
     if choice == 1
-      name = ""
-      until name.size >= 3
-        puts 'Введите ваше Имя(login name)'
-        name = STDIN.gets.chomp
-        puts 'Имя должно быть не короче трёх символов' if name.size < 3
+      puts 'Введите ваше Имя(login name)'
+      name = STDIN.gets.chomp
+      puts 'email'
+      email = STDIN.gets.chomp
+      user = User.new(name: name, email: email)
+      user.save
+      if user.errors.present?
+        choice = nil
+        p user.errors.each {|i| p i}
+      else
+        puts "Регистрация #{user.name} завершена\n\n"
       end
-      user = User.new(name)
-      db.action_with_db(interface.query_to_registr(name))
-      puts "Регистрация завершена\n\n"
     elsif choice == 2
-      name = nil
-      db_answer = []
-      while interface.user_exist?(name, db_answer) == false
-        puts 'Введите имя'
-        name = STDIN.gets.chomp
-        user = User.new(name)
-        db_answer = db.action_with_db(interface.query_to_login(name))
-        puts 'Такого имени нет в базе' if interface.user_exist?(name, db_answer) == false
+      puts 'Введите email'
+      email = STDIN.gets.chomp
+      user = User.find_by(email: email)
+      if user.nil?
+        choice = nil
+        puts 'Такого имени нет в базе'
+      else
+        puts "Авторизация #{user.name} успешна\n\n"
       end
-      puts "Авторизация успешна\n\n"
-    else
-      puts 'Выбор не коректен'
-    end
-  end
-
-  choice = nil
-  while choice != 9
-    puts "\n\nВыберите действие:"
-    puts "написать общее сообщение - 1\nпрочитать общее сообщение - 2"
-    puts "написать личное сообщение - 3\nпрочитать личное сообщенияе - 4"
-    puts 'выход - 9'
-
-    choice = STDIN.gets.chomp.to_i
-    if choice == 1 || choice == 3
-      puts 'Введите текст сообщения'
-      text = STDIN.gets.chomp
-      if choice == 3
-        puts 'Кому хотите отправить сообщение'
-        whom = STDIN.gets.chomp
-      end
-    end
-    if [1, 2, 3, 4].include?(choice)
-      query = interface.make_query_request(choice, user.name, text, whom)
-      db_as_hash = true
-      messages = []
-      messages = db.action_with_db(query, db_as_hash).map {|str| messages << Message.new(str)}
-      messages.each {|i| i.to_s} if [2, 4].include?(choice)
-    else
-      puts 'Выбор не коректен'
     end
   end
 end
+
+def read_right_message
+  # user = User.find_by(email: 'qwe@qwe.ru')
+  choice = nil
+  puts '1 - написать сообщение'
+  puts '2 - прочитать сообщения адресованные пользователю'
+  puts '3 - прочитать написанное пользователем'
+  puts '9 - выход'
+  choice = STDIN.gets.chomp
+
+  if choice == 9
+    puts 'bye bye'
+  elsif choice.to_i == 1
+    puts 'enter message'
+    text = STDIN.gets.chomp
+    puts 'whom? if no one is left blank'
+    whom = STDIN.gets.chomp
+    whom = nil if whom == ''
+    Message.create(text: text, user: user, whom: whom)
+  elsif choice.to_i == 2
+    Message.where(whom: user.name).each {|i| puts i.text}
+    read_right_message
+  elsif choice.to_i == 3
+    Message.where(user_id: user.id).each {|i| puts i.text}
+    read_right_message
+  else
+    puts "wrong input - #{choice}"
+    read_right_message
+  end
+end
+
+sign_login
+mes
