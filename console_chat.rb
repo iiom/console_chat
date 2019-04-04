@@ -19,8 +19,10 @@ def sign_login
     name = STDIN.gets.chomp
     puts 'Введите ваш (email)'
     email = STDIN.gets.chomp
+    puts 'Введите пароль'
+    password = STDIN.gets.chomp
     begin
-      user = User.new(name: name, email: email)
+      user = User.new(name: name, email: email, password: password)
       user.save!
     rescue ActiveRecord::RecordInvalid => errors
       puts errors
@@ -30,9 +32,11 @@ def sign_login
   elsif choice.to_i == 2
     puts 'Введите email'
     email = STDIN.gets.chomp
-    user = User.find_by(email: email)
+    puts 'Введите password'
+    password = STDIN.gets.chomp
+    user = User.authenticate(email, password)
     if user.nil?
-      puts 'Такого email нет в базе'
+      puts 'Не верный email или password'
       sign_login
     else
       puts "Авторизация #{user.name} успешна\n\n"
