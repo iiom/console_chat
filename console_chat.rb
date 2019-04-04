@@ -19,19 +19,20 @@ def sign_login
     name = STDIN.gets.chomp
     puts 'Введите ваш (email)'
     email = STDIN.gets.chomp
-    user = User.create(name: name, email: email)
-    if user.errors.present?
-      p user.errors.each {|i| i}
+    begin
+      user = User.new(name: name, email: email)
+      user.save!
+    rescue ActiveRecord::RecordInvalid => errors
+      puts errors
       sign_login
-    else
-      puts "Регистрация #{user.name} завершена\n\n"
     end
+    puts "Регистрация #{user.name} завершена\n\n"
   elsif choice.to_i == 2
     puts 'Введите email'
     email = STDIN.gets.chomp
     user = User.find_by(email: email)
     if user.nil?
-      puts 'Такого имени нет в базе'
+      puts 'Такого email нет в базе'
       sign_login
     else
       puts "Авторизация #{user.name} успешна\n\n"
@@ -59,11 +60,16 @@ def read_wright_message(user)
     puts 'whom? if no one is left blank'
     whom = STDIN.gets.chomp
     whom = nil if whom == ''
-    Message.create(text: text, user: user, whom: whom)
+    begin
+      message = Message.new(text: text, user: user, whom: whom)
+      message.save!
+    rescue ActiveRecord::RecordInvalid => errors
+      puts errors
+    end
     read_wright_message(user)
   elsif choice.to_i == 2
     Message.where(whom: user.name).each {|i| puts i.text}
-    read_wight_message(user)
+    read_wright_message(user)
   elsif choice.to_i == 3
     Message.where(user_id: user.id).each {|i| puts i.text}
     read_wright_message(user)
