@@ -13,7 +13,7 @@ def sign_login
   choice = STDIN.gets.chomp
 
   if choice.to_i == 9
-    puts 'bye bye'
+    return puts 'bye bye'
   elsif choice.to_i == 1
     puts 'Введите ваше Имя(login name)'
     name = STDIN.gets.chomp
@@ -49,8 +49,12 @@ end
 
 def read_wright_message(user)
   choice = nil
+  puts '______________________________________________'
+  puts "всего - #{Message.where(whom: user.name).count}"
+  puts "непрочитанных - #{Message.where(whom: user.name, view: false).count}"
+  puts '______________________________________________'
   puts '1 - написать сообщение'
-  puts '2 - прочитать сообщения адресованные пользователю'
+  puts '2 - прочитать новые сообщения адресованные пользователю'
   puts '3 - прочитать написанное пользователем'
   puts '9 - выход'
   choice = STDIN.gets.chomp
@@ -70,7 +74,11 @@ def read_wright_message(user)
     end
     read_wright_message(user)
   elsif choice.to_i == 2
-    Message.where(whom: user.name).each {|i| puts i.text}
+    m = Message.where(whom: user.name, view: false)
+    m.each do |i|
+      puts i.text
+      m.update(view: true)
+    end
     read_wright_message(user)
   elsif choice.to_i == 3
     Message.where(user_id: user.id).each {|i| puts i.text}
@@ -83,3 +91,12 @@ end
 
 sign_login
 
+# user = User.authenticate('qq@qq.ru', 'qq')
+# m = Message.where(whom: user.name, view: false)
+# m.each do |i|
+#   puts i.text
+#   m.update(view: true)
+# end
+# # Message.where(whom: user.name).update(view: false)
+
+# Message.where(whom: user.name).each {|i| puts i.view}

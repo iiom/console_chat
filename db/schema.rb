@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2019_04_04_161345) do
     t.string "text"
     t.string "whom"
     t.integer "user_id"
+    t.boolean "view", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_messages_on_user_id"
