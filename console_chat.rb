@@ -22,8 +22,7 @@ def sign_login
     puts 'Введите пароль'
     password = STDIN.gets.chomp
     begin
-      user = User.new(name: name, email: email, password: password)
-      user.save!
+      user = User.create!(name: name, email: email, password: password)
     rescue ActiveRecord::RecordInvalid => errors
       puts errors
       sign_login
@@ -57,7 +56,7 @@ def read_wright_message(user)
   choice = STDIN.gets.chomp
 
   if choice.to_i == 9
-    puts 'bye bye'
+    return puts 'bye bye'
   elsif choice.to_i == 1
     puts 'enter message'
     text = STDIN.gets.chomp
@@ -65,8 +64,7 @@ def read_wright_message(user)
     whom = STDIN.gets.chomp
     whom = nil if whom == ''
     begin
-      message = Message.new(text: text, user: user, whom: whom)
-      message.save!
+      message = Message.create!(text: text, user: user, whom: whom)
     rescue ActiveRecord::RecordInvalid => errors
       puts errors
     end
