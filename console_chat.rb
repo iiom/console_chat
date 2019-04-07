@@ -14,9 +14,15 @@ def sign_in
   email = STDIN.gets.chomp
   puts 'Введите пароль'
   password = STDIN.gets.chomp
-  user = User.create!(name: name, email: email, password: password)
-rescue ActiveRecord::RecordInvalid => errors
-  puts errors
+
+  begin
+    user = User.create!(name: name, email: email, password: password)
+  rescue ActiveRecord::RecordInvalid => errors
+    puts '______________________________________________'
+    puts errors
+    puts '______________________________________________'
+    return action_sign_login_in_console
+  end
 
   if user.present?
     puts "Регистрация #{user.name} завершена\n\n"
@@ -35,7 +41,10 @@ def log_in
     puts "Авторизация #{user.name} успешна\n\n"
     action_with_message_in_console(user)
   else
+    puts '______________________________________________'
     puts 'Не верный email или password'
+    puts '______________________________________________'
+    return action_sign_login_in_console
   end
 end
 
@@ -61,39 +70,62 @@ def write_message(user)
   puts 'whom? if no one is left blank'
   whom = STDIN.gets.chomp
   whom = nil if whom == ''
-  message = Message.create!(text: text, user: user, whom: whom)
-rescue ActiveRecord::RecordInvalid => errors
-  puts errors
+
+  if whom.nil?
+    if User.find_by(name: whom).nil?
+      puts "нет такого пользователя #{whom}"
+    else
+      Message.create!(text: text, user: user, whom: whom)
+      puts "сообщение отправлено пользователю: #{whom}"
+    end
+  else
+    Message.create!(text: text, user: user, whom: whom)
+    puts 'сообщение отправлено'
+  end
 end
 
 def read_new_message_addressed_to_user(user)
   m = Message.where(whom: user.name, view: false)
+  puts '______________________________________________'
+  puts "сообшения не прочитанные пользователем:"
   m.each do |i|
-    puts i.text
+    puts
+    print "from: #{i.user.name}"
+    i.whom.nil? ? puts : (puts " to: #{i.whom}")
+    puts "text: #{i.text}"
+    puts i.created_at
     m.update(view: true)
   end
 end
 
 def read_message_written_by_user(user)
-  Message.where(user_id: user.id).each {|i| puts i.text}
+  puts '______________________________________________'
+  m = Message.where(user_id: user.id)
+  puts "все сообшения написанные пользователем:"
+  m.each do |i|
+    puts
+    print "from: #{i.user.name}"
+    i.whom.nil? ? puts : (puts " to: #{i.whom}")
+    puts "text: #{i.text}"
+    puts i.created_at
+  end
 end
 
 def action_sign_login_in_console
-  choice = nil
-  while choice.to_i != 9
-    puts "Выберите регистрация или авторизация\nregistr - 1\nlogin - 2\nexit - 9"
-    choice = STDIN.gets.chomp
+  puts "\nВыберите регистрация или авторизация\nregistr - 1\nlogin - 2\nexit - 9"
+  choice = STDIN.gets.chomp
 
-    if choice.to_i == 9
-      return puts 'bye bye'
-    elsif choice.to_i == 1
-      user = sign_in
-    elsif choice.to_i == 2
-      user = log_in
-    else
-      puts "wrong input - #{choice}"
-      action_sign_login_in_console
-    end
+  if choice.to_i == 9
+    return puts 'bye bye'
+  elsif choice.to_i == 1
+    user = sign_in
+  elsif choice.to_i == 2
+    user = log_in
+  else
+    puts '______________________________________________'
+    puts "wrong input - #{choice}"
+    puts '______________________________________________'
+    action_sign_login_in_console
   end
 end
 
@@ -113,7 +145,9 @@ def action_with_message_in_console(user)
     elsif choice.to_i == 3
       read_message_written_by_user(user)
     else
+      puts '______________________________________________'
       puts "wrong input - #{choice}"
+      puts '______________________________________________'
     end
   end
 end
