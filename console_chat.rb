@@ -54,7 +54,7 @@ def text_in_console(user)
   puts
   puts '______________________________________________'
   puts "всего личных сообщений - #{Message.where(whom: user.name).count}"
-  puts "непрочитанных сообщений - #{Message.where(whom: user.name, view: false).count}"
+  puts "не прочитанных личных сообщений - #{Message.where(whom: user.name, view: false).count}"
   puts '______________________________________________'
   puts
   puts '1 - написать сообщение'
@@ -70,24 +70,27 @@ def write_message(user)
   puts 'whom? if no one is left blank'
   whom = STDIN.gets.chomp
   whom = nil if whom == ''
-
   if whom.nil?
+    Message.create!(text: text, user: user, whom: whom)
+    puts 'сообщение отправлено'
+  else
     if User.find_by(name: whom).nil?
       puts "нет такого пользователя #{whom}"
     else
       Message.create!(text: text, user: user, whom: whom)
       puts "сообщение отправлено пользователю: #{whom}"
     end
-  else
-    Message.create!(text: text, user: user, whom: whom)
-    puts 'сообщение отправлено'
   end
 end
 
 def read_new_message_addressed_to_user(user)
   m = Message.where(whom: user.name, view: false)
   puts '______________________________________________'
-  puts "сообшения не прочитанные пользователем:"
+  if m.empty?
+    puts 'У вас нет новых сообщений'
+  else
+    puts "сообшения не прочитанные пользователем:"
+  end
   m.each do |i|
     puts
     print "from: #{i.user.name}"
@@ -99,9 +102,13 @@ def read_new_message_addressed_to_user(user)
 end
 
 def read_message_written_by_user(user)
-  puts '______________________________________________'
   m = Message.where(user_id: user.id)
-  puts "все сообшения написанные пользователем:"
+  puts '______________________________________________'
+  if m.empty?
+    puts 'У вас нет сообщений'
+  else
+    puts "все сообшения написанные пользователем:"
+  end
   m.each do |i|
     puts
     print "from: #{i.user.name}"
