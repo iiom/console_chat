@@ -67,7 +67,7 @@ end
 def write_message(user)
   puts 'enter message'
   text = STDIN.gets.chomp
-  puts 'whom? if no one is left blank'
+  puts 'whom(name user)? if no one is left blank'
   whom = STDIN.gets.chomp
   whom = nil if whom == ''
   if whom.nil?
