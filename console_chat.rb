@@ -2,52 +2,12 @@ require 'active_record'
 require_relative 'lib/models/user'
 require_relative 'lib/models/message'
 require_relative 'lib/DBConnection'
+require_relative 'lib/module/module_session'
 
+include Session
 
 db_configuration_file = File.join(File.expand_path('..', __FILE__), 'db', 'config.yml')
 DBConnection.db_configuration(db_configuration_file)
-
-def sign_in
-  puts 'Введите ваше Имя(login name)'
-  name = STDIN.gets.chomp
-  puts 'Введите ваш (email)'
-  email = STDIN.gets.chomp
-  puts 'Введите пароль'
-  password = STDIN.gets.chomp
-
-  begin
-    user = User.create!(name: name, email: email, password: password)
-  rescue ActiveRecord::RecordInvalid => errors
-    puts '______________________________________________'
-    puts errors
-    puts '______________________________________________'
-    return action_sign_login_in_console
-  end
-
-  if user.present?
-    puts "Регистрация #{user.name} завершена\n\n"
-    action_with_message_in_console(user)
-  end
-end
-
-def log_in
-  puts 'Введите email'
-  email = STDIN.gets.chomp
-  puts 'Введите password'
-  password = STDIN.gets.chomp
-  user = User.authenticate(email, password)
-
-  if user.present?
-    puts "Авторизация #{user.name} успешна\n\n"
-    action_with_message_in_console(user)
-  else
-    puts '______________________________________________'
-    puts 'Не верный email или password'
-    puts '______________________________________________'
-    return action_sign_login_in_console
-  end
-end
-
 
 def text_in_console(user)
   return nil if user.nil?
@@ -64,6 +24,12 @@ def text_in_console(user)
   puts
 end
 
+def create_message(user, text, whom)
+  Message.create!(text: text, user: user, whom: whom)
+rescue ActiveRecord::RecordInvalid => error
+  puts error
+end
+
 def write_message(user)
   puts 'enter message'
   text = STDIN.gets.chomp
@@ -71,13 +37,13 @@ def write_message(user)
   whom = STDIN.gets.chomp
   whom = nil if whom == ''
   if whom.nil?
-    Message.create!(text: text, user: user, whom: whom)
-    puts 'сообщение отправлено'
+    create_message(user, text, whom)
+    puts 'сообщение отправлено' unless text.blank?
   else
     if User.find_by(name: whom).nil?
       puts "нет такого пользователя #{whom}"
     else
-      Message.create!(text: text, user: user, whom: whom)
+      create_message(user, text, whom)
       puts "сообщение отправлено пользователю: #{whom}"
     end
   end
@@ -118,20 +84,33 @@ def read_message_written_by_user(user)
   end
 end
 
+
 def action_sign_login_in_console
   puts "\nВыберите регистрация или авторизация\nregistr - 1\nlogin - 2\nexit - 9"
   choice = STDIN.gets.chomp
+  params = set_params(choice) if choice.to_i == 1 || choice.to_i == 2
 
-  if choice.to_i == 9
-    return puts 'bye bye'
-  elsif choice.to_i == 1
-    user = sign_in
+  return puts 'bye bye' unless choice.to_i != 9
+
+  if choice.to_i == 1
+    user = create_user(params)
+
+    if user.present?
+      puts "Регистрация #{user.name} завершена\n\n"
+      action_with_message_in_console(user)
+    end
   elsif choice.to_i == 2
-    user = log_in
+    user = User.authenticate(params[:email], params[:password])
+
+    if user.present?
+      puts "Авторизация #{user.name} успешна\n\n"
+      action_with_message_in_console(user)
+    else
+      puts 'Не верный email или password'
+      return action_sign_login_in_console
+    end
   else
-    puts '______________________________________________'
     puts "wrong input - #{choice}"
-    puts '______________________________________________'
     action_sign_login_in_console
   end
 end
@@ -152,9 +131,7 @@ def action_with_message_in_console(user)
     elsif choice.to_i == 3
       read_message_written_by_user(user)
     else
-      puts '______________________________________________'
       puts "wrong input - #{choice}"
-      puts '______________________________________________'
     end
   end
 end
