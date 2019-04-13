@@ -21,5 +21,4 @@ module Session
     puts error
     return action_sign_login_in_console
   end
-
 end
