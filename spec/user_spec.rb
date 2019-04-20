@@ -1,9 +1,15 @@
 require 'rspec'
-require_relative '../lib/user'
+require 'active_record'
+require 'sqlite3'
+require_relative '../lib/models/user'
 
 describe 'Класс работы с User' do
   before(:all) do
-    @user = User.new('Jack')
+    yml = File.join(File.expand_path(Dir.pwd),  'db', 'config.yml')
+    p yml
+    ActiveRecord::Base.establish_connection(YAML.load(File.read(yml))["test"])
+    ActiveRecord::Migration.maintain_test_schema!
+    @user = User.create(name: 'Jack', email: 'qq@qq.ru', password: '123')
   end
 
   it 'создание нового пользователя' do
