@@ -8,7 +8,7 @@ require_relative 'lib/controller/session_controller'
 
 
 db_configuration_file = File.join(File.expand_path('..', __FILE__), 'db', 'config.yml')
-DBConnection.db_configuration(db_configuration_file)
+DBConnection.db_configuration(db_configuration_file, "development")
 
 def text_in_console(user)
   return nil if user.nil?
