@@ -5,6 +5,8 @@ require_relative '../lib/DBConnection'
 require_relative '../lib/models/user'
 require_relative '../lib/models/message'
 require_relative '../lib/models/messages_user'
+require_relative '../lib/controller/session_controller'
+require_relative '../lib/controller/message_controller'
 
 
 yml = File.join(File.expand_path(Dir.pwd),  'db', 'config.yml')
