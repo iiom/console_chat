@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   include BCrypt
 
   has_many :messages
+  has_many :messages_users
+  has_many :messages, through: :messages_users
 
   before_save :name_downcase!
 
@@ -22,13 +24,6 @@ class User < ActiveRecord::Base
     if password.present?
       self.password_hash = BCrypt::Password.create(password)
     end
-  end
-
-  def self.authenticate(email, password)
-    user = find_by(email: email)
-    return nil unless user.present?
-    return user if BCrypt::Password.new(user.password_hash) == password
-    nil
   end
 
   def name_downcase!
