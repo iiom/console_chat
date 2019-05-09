@@ -39,7 +39,7 @@ def action_sign_login_in_console
     (return action_with_message_in_console(user))
   else
     puts 'Не верный email или password' if choice.to_i == 2
-    puts "wrong input - #{choice}" if choice.to_i != 1 || choice.to_i != 2
+    puts "wrong input - #{choice}" unless choice.to_i == 1 || choice.to_i == 2
     (return action_sign_login_in_console)
   end
 end

@@ -13,9 +13,10 @@ DBConnection.db_configuration(yml, "test")
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  config.before(:all) do
-    %x[bundle exec rake db:drop]
-    %x[bundle exec rake db:schema:load RAILS_ENV=test]
+  config.before(:suite) do
+    MessagesUser.delete_all
+    Message.delete_all
+    User.delete_all
   end
 
   config.expect_with :rspec do |expectations|
