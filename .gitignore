@@ -27,3 +27,5 @@ db/schema.rb
 .idea
 .vscode
 .ruby-gemset
+.rvmrc
+.Gemfile.lock
